@@ -1,0 +1,7 @@
+secrets.env
+server.key
+server.pem
+dhparamspem
+*.swp
+.*.swp
+*secret*

@@ -1,0 +1,8 @@
+source_name: "ubuntu_focal"
+
+src_image_url: ""
+dst_image_repo: "meep"
+#dst_image_repo: ""
+
+packer_auto_env_file: "env.auto.pkrvars.hcl"
+packer_template_file: "template.pkr.hcl"

@@ -1,0 +1,53 @@
+---
+- name: vault fiddler activate 
+  hosts: localhost
+  vars:
+  tasks:
+    - name: adding required vars
+      include_vars: vars/main.yml
+
+    - name: fiddling wit le vault
+      include_vars: vars/vault.yml     
+     
+    - name: generating packer template env files required
+      block:
+        - name: 
+          template:
+            src: "./templates/{{ packer_auto_env_file  }}.j2"
+            dest: "{{ packer_auto_env_file  }}"
+  
+        - name: generating packer template file required 
+          template:
+            src: "./templates/{{ packer_template_file  }}.j2"
+            dest: "{{ packer_template_file  }}"
+
+    - name: Time to build our swanky docker image wit packer
+      block:
+
+        - name: Running packer init against the template 
+          command: "packer init {{ packer_template_file }}"
+          register: init_output
+
+        - name: Running packer build against the template 
+          command: "packer build {{ packer_template_file }}"
+          register: build_output
+
+        - name: debuggin
+          debug:
+            msg: 
+              - "The init output {{ init_output }}" 
+              - "The build output {{ build_output }}" 
+
+
+            #    - name: Le contents
+            #      debug:
+            #        msg:
+            #          - "{{ TF_ADDRESS }}"
+            #          - "{{ VSPHERE_USERNAME }}"  
+            #          - "{{ VSPHERE_PASSWORD }}"
+            #          - "{{ PROJECT_USERNAME }}"
+            #          - "{{ PROJECT_PASSWORD }}"
+            #          - "{{ PROJECT_DEPLOYMENT_VARS }}"
+            #          - "{{ PROJECT_DEPLOYMENT_IPADDR_VARS }}"
+            #          - "{{ SECRET_VSPHERE_VARS }}"
+            #          - "{{ TERRAFORM_BACKEND_VARS }}"

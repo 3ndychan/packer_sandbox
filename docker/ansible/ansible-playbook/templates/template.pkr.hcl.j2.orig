@@ -1,0 +1,57 @@
+variable "base_image_uri" {
+  type    = string
+  default = "aetd-dockerlab.gsfc.nasa.gov/docker/etd-docker-containers/etd-ubuntu20"
+}
+
+variable "docker_repo" {
+type    = string
+default = "gs490v-gitlab.ndc.nasa.gov/427_PACE/docker_sandbox"
+}
+
+variable "login_username" {
+  type    = string
+  default = "username"
+}
+
+variable "login_password" {
+  type    = string
+  default = "password"
+}
+
+source "docker" "{{ source_name }}" {
+  commit = true
+  image  = "${var.base_image_uri}"
+}
+
+build {
+  name = "base-build"
+  sources = [
+    "source.docker.{{ source_name }}"
+  ]
+
+  provisioner "shell" {
+    inline = [
+      "apt clean all", 
+      "apt update", 
+      "apt -y install ansible"
+    ]
+  }
+
+  provisioner "ansible-local" {
+    playbook_file   = "./playbook.yml"
+    extra_arguments = ["--extra-vars", "\"pizza_toppings=${var.base_image_uri}\""]
+  }
+  post-processors {
+    post-processor "docker-tag" {
+      repository = "var.docker_repo"
+      tags       = ["{{ source_name }}", "testydoo"]
+      only       = ["docker.{{ source_name }}"]
+    }
+    post-processors "docker-push" {
+      login=true
+      login_username = var.docker_username
+      login_password = var.docker_password
+      
+  }
+}
+}
