@@ -1,11 +1,11 @@
 variable "base_image_uri" {
   type    = string
-  default = "aetd-dockerlab.gsfc.nasa.gov/docker/etd-docker-containers/etd-ubuntu20"
+  default = ""
 }
 
 variable "docker_repo" {
 type    = string
-default = "gs490v-gitlab.ndc.nasa.gov/427_PACE/docker_sandbox"
+default = ""
 }
 
 variable "login_username" {
