@@ -7,4 +7,6 @@ Files:
   playbook.yml: The playbook that will be used as the provisioner
   template.pkr.hcl: The main Packer template file. This is the main file where you specify  the builder, plugins, & all the processing pre, during, & post.
 
-
+TODO: 
+	Fix it to do a local build by creating a build directory, which should be added to .gitignore with all of it's children, & just the name of w/e image is being built. By doing this we'd also have to change the inits & builds to navigate to the directory so should probably variablize some stuffs 
+	This ought run fully ansiblized while also working getting around to making sure to name the image correctly & eventually throwing it at a container registry. 
